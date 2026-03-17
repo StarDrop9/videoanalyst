@@ -91,7 +91,7 @@ async function generateSummary(transcript: any[], title: string) {
       'Authorization': 'Bearer ' + apiKey,
     },
     body: JSON.stringify({
-      model: 'google/gemini-2.5-flash-preview',
+      model: 'google/gemini-2.0-flash-001',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userContent },

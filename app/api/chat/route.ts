@@ -109,7 +109,7 @@ Answer questions about this video based on the available information. Be transpa
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash-preview',
+        model: 'google/gemini-2.0-flash-001',
         messages,
         stream: true,
         max_tokens: 2000,
