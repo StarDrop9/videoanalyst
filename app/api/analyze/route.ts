@@ -63,7 +63,7 @@ async function fetchVideoInfo(videoId: string) {
 }
 
 async function generateSummary(transcript: any[], title: string) {
-  const apiKey = process.env.ABACUSAI_API_KEY;
+  const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) throw new Error('API key not configured');
 
   const hasTranscript = transcript?.length > 0;
@@ -84,14 +84,14 @@ async function generateSummary(transcript: any[], title: string) {
     ? 'Video Title: ' + title + '\n\nTranscript:\n' + transcriptText
     : 'Video Title: ' + title + '\n\n(No transcript available — please analyze based on the title only)';
 
-  const response = await fetch('https://apps.abacus.ai/v1/chat/completions', {
+  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + apiKey,
     },
     body: JSON.stringify({
-      model: 'gemini-2.5-flash',
+      model: 'google/gemini-2.5-flash-preview',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userContent },

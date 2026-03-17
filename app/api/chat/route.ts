@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
       content: m?.content ?? '',
     }));
 
-    const apiKey = process.env.ABACUSAI_API_KEY;
+    const apiKey = process.env.OPENROUTER_API_KEY;
     if (!apiKey) {
       return new Response(JSON.stringify({ error: 'API key not configured' }), {
         status: 500,
@@ -102,14 +102,14 @@ Answer questions about this video based on the available information. Be transpa
       { role: 'user', content: message },
     ];
 
-    const response = await fetch('https://apps.abacus.ai/v1/chat/completions', {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'gemini-2.5-flash',
+        model: 'google/gemini-2.5-flash-preview',
         messages,
         stream: true,
         max_tokens: 2000,
