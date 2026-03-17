@@ -128,6 +128,35 @@ async function fetchTranscript(videoId: string): Promise<{ items: any[]; warning
     console.log('youtube-transcript import failed:', e?.message);
   }
 
+  // Fallback: Supadata proxy API (bypasses Vercel IP block)
+  const supadataKey = process.env.SUPADATA_API_KEY;
+  if (supadataKey) {
+    try {
+      const res = await fetch(
+        `https://api.supadata.ai/v1/youtube/transcript?videoId=${videoId}&lang=en`,
+        { headers: { 'x-api-key': supadataKey } }
+      );
+      if (res.ok) {
+        const data = await res.json();
+        const segments: any[] = Array.isArray(data?.content) ? data.content : [];
+        if (segments.length) {
+          console.log(`Supadata transcript fetch succeeded: ${segments.length} segments`);
+          return {
+            items: segments.map((s: any) => ({
+              text: s.text ?? '',
+              offset: (s.offset ?? 0) / 1000,   // Supadata returns ms
+              duration: (s.duration ?? 0) / 1000,
+            })),
+          };
+        }
+      } else {
+        console.log('Supadata transcript failed:', res.status);
+      }
+    } catch (e: any) {
+      console.log('Supadata transcript error:', e?.message);
+    }
+  }
+
   // All attempts failed
   console.warn('No transcript available for video:', videoId);
   return {
