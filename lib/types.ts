@@ -13,6 +13,7 @@ export interface VideoData {
   duration: string | null;
   transcript: string | null;
   summary: string | null;
+  visualTranscript: string | null;
   createdAt: string;
   updatedAt: string;
 }

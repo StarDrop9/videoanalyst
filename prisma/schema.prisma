@@ -15,8 +15,9 @@ model Video {
   title        String
   thumbnailUrl String?
   duration     String?
-  transcript   String?
-  summary      String?
+  transcript       String?
+  summary          String?
+  visualTranscript String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   chatMessages ChatMessage[]

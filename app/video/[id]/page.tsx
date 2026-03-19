@@ -2,13 +2,14 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'next/navigation';
-import { FileText, Sparkles, MessageSquare, Network, Loader2, AlertCircle } from 'lucide-react';
+import { FileText, Sparkles, MessageSquare, Network, Loader2, AlertCircle, Eye } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Sidebar from '@/components/sidebar';
 import VideoPlayer, { VideoPlayerRef } from '@/components/video-player';
 import TranscriptViewer from '@/components/transcript-viewer';
 import SummaryDisplay from '@/components/summary-display';
 import ChatInterface from '@/components/chat-interface';
+import VisualTranscriptDisplay from '@/components/visual-transcript-display';
 import type { VideoData, TranscriptItem, ChatMessageData } from '@/lib/types';
 
 const MindMapDisplay = dynamic(() => import('@/components/mind-map-display'), {
@@ -20,7 +21,7 @@ const MindMapDisplay = dynamic(() => import('@/components/mind-map-display'), {
   ),
 });
 
-type TabType = 'summary' | 'chat' | 'mindmap';
+type TabType = 'summary' | 'chat' | 'mindmap' | 'visual';
 
 export default function VideoPage() {
   const params = useParams();
@@ -170,6 +171,20 @@ export default function VideoPage() {
                 <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
               )}
             </button>
+            <button
+              onClick={() => setActiveTab('visual')}
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-colors relative ${
+                activeTab === 'visual'
+                  ? 'text-primary'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <Eye className="w-4 h-4" />
+              Visual
+              {activeTab === 'visual' && (
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary" />
+              )}
+            </button>
           </div>
 
           {/* Tab Content */}
@@ -193,6 +208,14 @@ export default function VideoPage() {
                 summary={video?.summary ?? ''}
                 title={video?.title ?? 'Video Summary'}
                 isActive={activeTab === 'mindmap'}
+              />
+            </div>
+            <div className={`h-full overflow-y-auto ${activeTab === 'visual' ? '' : 'hidden'}`}>
+              <VisualTranscriptDisplay
+                dbVideoId={video?.id ?? ''}
+                visualTranscript={video?.visualTranscript ?? null}
+                onTimestampClick={handleTimestampClick}
+                onGenerated={(vt) => setVideo((v) => v ? { ...v, visualTranscript: vt } : v)}
               />
             </div>
           </div>
