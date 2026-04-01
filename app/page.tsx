@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Youtube, Sparkles, Loader2, AlertCircle, Play, MessageSquare, FileText, Clock } from 'lucide-react';
+import { Sparkles, Loader2, AlertCircle, Play, MessageSquare, FileText, Clock } from 'lucide-react';
 import Sidebar from '@/components/sidebar';
 import { motion } from 'framer-motion';
 
@@ -78,8 +78,10 @@ export default function HomePage() {
             <div className="space-y-3">
               <div className="flex gap-2">
                 <div className="relative flex-1">
-                  <Youtube className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500" />
+                  <Play aria-hidden="true" className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500" />
+                  <label htmlFor="yt-url" className="sr-only">YouTube URL</label>
                   <input
+                    id="yt-url"
                     type="text"
                     value={url}
                     onChange={(e: any) => {
@@ -97,6 +99,7 @@ export default function HomePage() {
                 <button
                   onClick={handleAnalyze}
                   disabled={loading}
+                  aria-label={loading ? 'Analyzing video' : 'Analyze video'}
                   className="px-6 py-3.5 bg-primary text-primary-foreground rounded-xl font-medium text-sm hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shrink-0"
                 >
                   {loading ? (
